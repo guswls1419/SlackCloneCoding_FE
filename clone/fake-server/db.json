@@ -1,0 +1,15 @@
+{
+  "posts": [
+    {
+      "file": {
+        "imageUrl": "aaaa@naver.com",
+        "imageFilename": "aaaaa"
+      },
+      "information": {
+        "email": "aaaaa@naver.com",
+        "password": "111111",
+        "nickname": "name"
+      }
+    }
+  ]
+}

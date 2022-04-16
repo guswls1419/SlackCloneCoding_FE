@@ -27,9 +27,9 @@ const Image = (props) => {
 
 Image.defaultProps = {
   shape: "rectangle",
-  src: "https://ifh.cc/g/nn7mf5.png",
+  src: "https://slack.com/",
   width: "100px",
-  height: "50px"
+  height: "50px",
 };
 
 const ImageDefault = styled.div`
