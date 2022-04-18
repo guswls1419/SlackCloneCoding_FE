@@ -21,8 +21,6 @@ const WSpace = styled.div`
 min-width : 20%;
 position: relative;
 background : #1a1d21;
-border-right: 1px solid #464646 ;
-border-left: 1px solid #464646 ;
 `;
 
 const WSpaceTop = styled.div`
