@@ -6,57 +6,48 @@ import { setToken, delToken } from "../../shared/token";
 import api from "../../api/api";
 
 //1)액션 타입을 만든다
-const SET_USER = "SET_USER";
+const LOG_IN = "LOG_IN";
 const LOG_OUT = "LOG_OUT";
 const GET_USER = "GET_USER";
 const LOAD_TOKEN = "LOAD_TOKEN";
 const POST_USER = "POST_USER";
+
+//3)initialState 만든다
+const initialState = {
+  email: "",
+  password: "",
+  nickname: "",
+  is_login: false,
+};
+
 //2)액션 생성 함수를 만든다
-const setUser = createAction(SET_USER, (user) => ({ user }));
+const logIn = createAction(LOG_IN, (user) => ({ user }));
 const logOut = createAction(LOG_OUT, (user) => ({ user }));
 const getUser = createAction(GET_USER, (user) => ({ user }));
 const loadToken = createAction(LOAD_TOKEN, (token) => ({ token }));
 
-//3)initialState 만든다
-const initialState = {
-  file: {
-    imageUrl: "",
-    imageFilename: "",
-  },
-  information: {
-    email: "",
-    password: "",
-    nickname: "",
-  },
-};
-
-const signupDB = (imageurl, imagefilename, email, password, nickname) => {
-  console.log(imageurl, imagefilename, email, password, nickname);
-
+const signupDB = (email, password, nickname) => {
   return function (dispatch, getState, { history }) {
-    api
-      .post("/posts", {
-        file: { imageurl, imagefilename },
-        information: {
-          email,
-          password,
-          nickname,
-        },
+    console.log(dispatch);
+    axios
+      .post("http://13.209.7.115/user/signup", {
+        email: email,
+        password: password,
+        nickname: nickname,
       })
-      .then((res) => {
-        console.log(res);
-        // window.alert("회원가입이 완료되었습니다!");
-        // history.replace("/login");
+      .then((response) => {
+        window.alert("회원가입을 축하합니다!");
+        history.push("/");
       })
-      .catch((err) => {
-        console.log(err);
-        // window.alert(err.response.data.errorMessage);
+      .catch((error) => {
+        alert("중복된 아이디가 존재합니다.");
+        console.log("회원가입 DB Error", error);
       });
   };
 };
 
 // 토큰로드 액션
-const loadTokenFB = () => {
+const loadTokenDB = () => {
   return function (dispatch) {
     if (getCookie("Authorization")) {
       dispatch(loadToken());
@@ -65,22 +56,25 @@ const loadTokenFB = () => {
 };
 
 const loginFB = (email, password) => {
+  console.log(email, password);
   return function (dispatch, getState, { history }) {
     api
-      .post("/posts", {
-        email: email,
+      .post("/user/login", {
+        username: email,
         password: password,
       })
-      .then((response) => {
-        console.log(response);
-        console.log(response.config.data.split(":"));
-        dispatch();
-        setCookie(
-          "Authorization",
-          response.headers.authorization.split(" ")[1]
+      .then((res) => {
+        console.log(res.config.data.split(" :"));
+        dispatch(
+          logIn({
+            is_login: true,
+          })
         );
-        history.replace("/todoList");
+        setCookie("Authorization", res.headers.authorization.split(" ")[1]);
+        setCookie("email", email);
+        history.replace("/");
       })
+
       .catch((error) => {
         window.alert("아이디 또는 비밀번호를 확인해주세요.");
         console.log("Login Error", error);
@@ -99,18 +93,24 @@ const logOutDB = (dispatch, getState, { history }) => {
 //4)리듀서 만든다(feat.immer)
 export default handleActions(
   {
-    [SET_USER]: (state, action) =>
+    [LOG_IN]: (state, action) =>
       produce(state, (draft) => {
         setCookie("is_login", "success");
-        draft.userInfo = action.payload.user;
+        console.log(state, action.payload, draft.user);
+        draft.user = action.payload.user;
         draft.is_login = true;
       }),
 
     [LOG_OUT]: (state, action) =>
       produce(state, (draft) => {
+        deleteCookie("Authorization");
+        deleteCookie("email");
         deleteCookie("is_login");
-        draft.userInfo = null;
         draft.is_login = false;
+      }),
+    [LOAD_TOKEN]: (state, action) =>
+      produce(state, (draft) => {
+        draft.is_login = true;
       }),
     [GET_USER]: (state, action) => produce(state, (draft) => {}),
   },
@@ -121,7 +121,7 @@ const actionCreators = {
   loginFB,
   logOutDB,
   signupDB,
-  setUser,
+  loadTokenDB,
 };
 
 export { actionCreators };

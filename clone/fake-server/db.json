@@ -1,0 +1,78 @@
+{
+  "posts": [
+    {
+      "email": "dd",
+      "password": "dd",
+      "id": 32
+    }
+  ],
+  "login": [
+    {
+      "email": "dd",
+      "password": "dd",
+      "id": 2
+    }
+  ],
+  "signup": [
+    {
+      "file": {
+        "imageurl": "",
+        "imagefilename": ""
+      },
+      "information": {
+        "email": "",
+        "password": "",
+        "nickname": ""
+      },
+      "id": 2
+    },
+    {
+      "file": {
+        "imageurl": "ㅇ",
+        "imagefilename": "ㅇ"
+      },
+      "information": {
+        "email": "ㅇ",
+        "password": "ㅇ",
+        "nickname": "ㅇ"
+      },
+      "id": 3
+    },
+    {
+      "file": {
+        "imageurl": "a",
+        "imagefilename": "a"
+      },
+      "information": {
+        "email": "a",
+        "password": "a",
+        "nickname": "a"
+      },
+      "id": 4
+    },
+    {
+      "file": {
+        "imageurl": "d",
+        "imagefilename": "d"
+      },
+      "information": {
+        "email": "dd",
+        "password": "d",
+        "nickname": "ddd"
+      },
+      "id": 5
+    },
+    {
+      "file": {
+        "imageurl": "d",
+        "imagefilename": "d"
+      },
+      "information": {
+        "email": "dddd@naver.",
+        "password": "d",
+        "nickname": "d"
+      },
+      "id": 6
+    }
+  ]
+}

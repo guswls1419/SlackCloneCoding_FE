@@ -5,16 +5,17 @@ import { useDispatch } from "react-redux";
 import { actionCreators as userActions } from "../redux/modules/user";
 import { FcGoogle } from "react-icons/fc";
 import { BsApple } from "react-icons/bs";
+import { history } from "../redux/configstore";
 
 const Login = (props) => {
   const dispatch = useDispatch();
-
+  console.log(props);
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
 
   const login = () => {
     if (email === "" || password === "") {
-      window.alert("아이디와 비밀번호를 모두 입력해주세요!");
+      window.alert("이메일과 비밀번호를 모두 입력해주세요!");
       return;
     }
     dispatch(userActions.loginFB(email, password));
@@ -24,12 +25,20 @@ const Login = (props) => {
     <Grid>
       <MainLogin>
         <LoginMain>
+          <BlankScreen />
           <Logo src="https://a.slack-edge.com/bv1-9/slack_logo-ebd02d1.svg" />
 
           <LoginMenu>
             <LoginContents>Slack을 처음 사용하시나요?</LoginContents>
             <SignupBtn>
-              <SignupBtnClick>계정 생성</SignupBtnClick>
+              <SignupBtnClick
+                onClick={(event) => {
+                  history.push(`/signup`);
+                  event.stopPropagation();
+                }}
+              >
+                계정 생성
+              </SignupBtnClick>
             </SignupBtn>
           </LoginMenu>
         </LoginMain>
@@ -89,6 +98,8 @@ const Login = (props) => {
 };
 
 const MainLogin = styled.div`
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -99,16 +110,15 @@ const LoginMain = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: space-between;
+`;
+const BlankScreen = styled.div`
+  width: 10%;
 `;
 
 const Logo = styled.img`
   height: 15%;
   width: 15%;
-  margin-top: 60px;
-  display: block;
-  margin-right: 500px;
-  margin-bottom: 30px;
 `;
 
 const LoginMenu = styled.div`
