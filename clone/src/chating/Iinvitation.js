@@ -49,6 +49,7 @@ const Iinvitation = (props) => {
       //   "/chat/message/1c38e86c-c072-40bf-b957-bb9977d35715",
       "/pub/chat/message",
 
+
       {},
       JSON.stringify(chatMessage)
     );
@@ -61,6 +62,7 @@ const Iinvitation = (props) => {
         if (!privateChats.get(payloadData.senderName)) {
           privateChats.set(payloadData.senderName, []);
           setPrivateChats(new Map(privateChats));
+  
         }
         break;
       case "MESSAGE":
