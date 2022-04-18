@@ -41,7 +41,7 @@ const Iinvitation = (props) => {
         };
         stompClient.send("/chat/message/1c38e86c-c072-40bf-b957-bb9977d35715", {}, JSON.stringify(chatMessage));
   }
-    
+    //?
     const onMessageReceived = (payload)=>{
         
         var payloadData = JSON.parse(payload.body);
