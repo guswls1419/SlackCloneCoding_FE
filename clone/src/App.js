@@ -9,7 +9,7 @@ import "./App.css";
 import DirectMessage from "./pages/DirectMessage";
 import ChatDetaill from "./pages/ChatDetaill";
 //import test from './test';
-import Iinvitation from "./chating/Iinvitation";
+import Invitation from "./chating/Invitation";
 
 function App() {
   return (
@@ -21,7 +21,7 @@ function App() {
         <Route path="/dm" exact component={DirectMessage} />
         <Route path="/chat/:roomid" exact component={ChatDetaill} />
         {/* <Route path="/test" exact component={test} /> */}
-        <Route path="/invitation" exact component={Iinvitation} />
+        <Route path="/invitation" exact component={Invitation} />
       </ConnectedRouter>
     </React.Fragment>
   );

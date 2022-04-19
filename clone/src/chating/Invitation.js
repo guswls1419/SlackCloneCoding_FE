@@ -6,11 +6,17 @@ import DirectMessage from "../pages/DirectMessage";
 import { over } from "stompjs";
 import SockJS from "sockjs-client";
 
-const Iinvitation = (props) => {
+const Invitation = (props) => {
   const history = useHistory();
 
   const [privateChats, setPrivateChats] = useState(new Map());
-  const [userData, setUserData] = useState({ name: "" });
+  const [userData, setUserData] = useState({
+    roomId: "26b21e78-53f0-4cab-b74d-c4c65300f41a",
+    room: {},
+    sender: "test",
+    message: "",
+    messages: [],
+  });
   const [publicChats, setPublicChats] = useState([]);
   console.log(userData);
 
@@ -32,7 +38,6 @@ const Iinvitation = (props) => {
       "/user/" + userData.name + "/private",
       onPrivateMessage
     );
-    userJoin();
   };
 
   const onError = (err) => {
@@ -41,16 +46,20 @@ const Iinvitation = (props) => {
 
   const userJoin = () => {
     var chatMessage = {
-      sender: "32323232",
+      sender: userData.name,
       type: "ENTER",
       roomId: "26b21e78-53f0-4cab-b74d-c4c65300f41a",
     };
+    console.log(userData);
     stompClient.send(
-      //   "/chat/message/1c38e86c-c072-40bf-b957-bb9977d35715",
       "/pub/chat/message",
 
       {},
-      JSON.stringify(chatMessage)
+      JSON.stringify({
+        type: "ENTER",
+        roomId: userData.roomId,
+        sender: userData.sender,
+      })
     );
   };
 
@@ -58,8 +67,8 @@ const Iinvitation = (props) => {
     var payloadData = JSON.parse(payload.body);
     switch (payloadData.status) {
       case "JOIN":
-        if (!privateChats.get(payloadData.senderName)) {
-          privateChats.set(payloadData.senderName, []);
+        if (!privateChats.get(payloadData.sender)) {
+          privateChats.set(payloadData.sender, []);
           setPrivateChats(new Map(privateChats));
         }
         break;
@@ -74,8 +83,8 @@ const Iinvitation = (props) => {
   const onPrivateMessage = (payload) => {
     console.log(payload);
     var payloadData = JSON.parse(payload.body);
-    if (privateChats.get(payloadData.senderName)) {
-      privateChats.get(payloadData.senderName).push(payloadData);
+    if (privateChats.get(payloadData.sender)) {
+      privateChats.get(payloadData.sender).push(payloadData);
       setPrivateChats(new Map(privateChats));
     } else {
       let list = [];
@@ -92,8 +101,7 @@ const Iinvitation = (props) => {
   };
   //버튼 실행함수
   const go = () => {
-    history.push("/chat/:roomid");
-    connect();
+    userJoin();
   };
 
   return (
@@ -221,4 +229,4 @@ const Inputs = styled.input`
   color: #ababad;
 `;
 
-export default Iinvitation;
+export default Invitation;
