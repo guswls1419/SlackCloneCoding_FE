@@ -3,21 +3,32 @@ import styled from "styled-components";
 import { Grid, Button, Text, Input } from "../elements";
 import { useHistory } from "react-router-dom";
 import DirectMessage from "../pages/DirectMessage";
+import ChatDetaill from "../pages/ChatDetaill";
 import { over } from "stompjs";
 import SockJS from "sockjs-client";
+import { useSelector } from "react-redux";
 
-const Iinvitation = (props) => {
+const Iinvitation = () => {
   const history = useHistory();
+  const user = useSelector((state)=> state);
 
-  const [privateChats, setPrivateChats] = useState(new Map());
-  const [userData, setUserData] = useState({ name: "" });
-  const [publicChats, setPublicChats] = useState([]);
-  console.log(userData);
+  console.log(user)
+  
+  const roomid = "123"
 
-  var stompClient = null;
+  const [privateChats, setPrivateChats] = useState(new Map()); //사용자 목록(map이 키가됨)
+  const [userData, setUserData] = useState({ 
+          name: "",
+          connected: false,
+          message: ""});
+  const [publicChats, setPublicChats] = useState([]);//새로운채팅방 배열
+  console.log(publicChats);
+
+   var stompClient = null;
   useEffect(() => {
     connect();
   }, []);
+
   //소켓
   const connect = () => {
     let Sock = new SockJS("http://54.180.105.154/ws-stomp");
@@ -26,13 +37,13 @@ const Iinvitation = (props) => {
   };
 
   const onConnected = () => {
-    // setUserData({ ...userData, connected: true });
-    stompClient.subscribe("/chat/createroom", onMessageReceived);
+    setUserData({ ...userData, connected: true });
+    stompClient.subscribe("/chat/createroom/", onMessageReceived);
     stompClient.subscribe(
       "/user/" + userData.name + "/private",
       onPrivateMessage
     );
-    userJoin();
+    //userJoin();
   };
 
   const onError = (err) => {
@@ -41,22 +52,20 @@ const Iinvitation = (props) => {
 
   const userJoin = () => {
     var chatMessage = {
-      sender: "32323232",
-      type: "ENTER",
-      roomId: "26b21e78-53f0-4cab-b74d-c4c65300f41a",
+      type: "ENTER", roomId: "26b21e78-53f0-4cab-b74d-c4c65300f41a", sender: userData.name
     };
     stompClient.send(
-      //   "/chat/message/1c38e86c-c072-40bf-b957-bb9977d35715",
       "/pub/chat/message",
 
 
       {},
-      JSON.stringify(chatMessage)
+      JSON.stringify({ type: "ENTER", roomId: "26b21e78-53f0-4cab-b74d-c4c65300f41a", sender: userData.name })
     );
   };
 
   const onMessageReceived = (payload) => {
     var payloadData = JSON.parse(payload.body);
+    console.log(payloadData)
     switch (payloadData.status) {
       case "JOIN":
         if (!privateChats.get(payloadData.senderName)) {
@@ -92,81 +101,54 @@ const Iinvitation = (props) => {
     const { value } = event.target;
     setUserData({ ...userData, name: value });
   };
+  
   //버튼 실행함수
   const go = () => {
-    history.push("/chat/:roomid");
-    connect();
+    //history.push(`/chat/${roomid}`);
+    userJoin();
   };
 
   return (
     <React.Fragment>
+    {/* {userData.connected ?( */}
+      <ChatDetaill/>
+    {/* ) : ( */}
       <ModalWrap>
         <Modal>
           <div>
             <Grid is_flex padding="20px">
-              <div
-                style={{ fontSize: "20px", fontWeight: "800", color: "white" }}
-              >
-                HangHae99에 초대 요청
-              </div>
-              <button
-                style={{
-                  fontSize: "20px",
-                  color: "white",
-                  background: "none",
-                  border: "none",
-                }}
-              >
-                x
-              </button>
+              <div style={{ fontSize: "20px", fontWeight: "800", color: "white" }}>
+                HangHae99에 초대 요청 </div>
+              <button style={{fontSize: "20px", color: "white", background: "none", border: "none"}} 
+                onClick={()=>{history.push('/dm')}} > x </button>
             </Grid>
             <Grid is_flex padding="0px 20px 8px 20px">
-              <div
-                style={{ fontSize: "14px", fontWeight: "600", color: "white" }}
-              >
-                받는사람:
-              </div>
-              <div style={{ fontSize: "14px", color: "white" }}>
-                다음에서 추가:
-              </div>
+              <div style={{ fontSize: "14px", fontWeight: "600", color: "white" }}>받는사람:</div>
+              <div style={{ fontSize: "14px", color: "white" }}> 다음에서 추가: </div>
             </Grid>
             <Grid is_flex padding="0px 20px 0px 20px">
-              <Textarea
-                type="textarea"
-                placeholder="name@naver.com"
-                onChange={handleUsername}
-              />
+              <Textarea type="textarea" placeholder="name@naver.com" onChange={handleUsername}/>
             </Grid>
             <Grid padding="20px 20px 8px 20px">
-              <div
-                style={{ fontSize: "14px", fontWeight: "600", color: "white" }}
-              >
-                요청이유(옵션)
-              </div>
+              <div style={{ fontSize: "14px", fontWeight: "600", color: "white" }}> 요청이유(옵션) </div>
             </Grid>
             <Grid padding="0px 20px 8px 20px">
               <Inputs type="text" placeholder="관리자를 위한 메모 추가" />
             </Grid>
             <Grid padding="0px 20px 8px 20px">
-              <div
-                style={{ fontSize: "13px", fontWeight: "300", color: "white" }}
-              >
-                요청이 관리자에게 전송되며 승인되거나 거부되면 알림을 받게
-                됩니다.
+              <div style={{ fontSize: "13px", fontWeight: "300", color: "white" }}>
+                요청이 관리자에게 전송되며 승인되거나 거부되면 알림을 받게 됩니다.
               </div>
             </Grid>
-            <Button
-              backgroundColor="#F5C820"
-              color="black"
-              _onClick={go}
-              width="100px"
-            >
+            <Button backgroundColor="#F5C820" color="black" _onClick={go} width="100px">
               요청 보내기
             </Button>
-          </div>
+            </div>
         </Modal>
       </ModalWrap>
-      <DirectMessage />
+ {/* )}  */}
+      <DirectMessage/>
+      
     </React.Fragment>
   );
 };

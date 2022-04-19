@@ -7,7 +7,7 @@ function MenuList() {
   return (
     <DmWrap>
       <WorkSpace/>
-       <Menu/>
+       <Menu />
     </DmWrap>
   )
 }
