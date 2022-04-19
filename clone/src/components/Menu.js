@@ -16,8 +16,8 @@ import { useHistory } from 'react-router-dom';
       setChange(Change ===false ? true : false)
     }
 
-    const go = () => {
-      history.push('/Iinvitation')
+    const goo = () => {
+      history.push('/invitation')
     }
 
 
@@ -44,27 +44,17 @@ import { useHistory } from 'react-router-dom';
         {/* 메신저 */}
         <DmMsg><AiFillCaretDown style={{marginRight :"5px"}}/>다이렉트 메시지</DmMsg>
         
+        
         <ListyleWrap>
         <UserProfile></UserProfile>
           <LiStylePadding2 >유저유저222
           <BtnDelete><IoClose/></BtnDelete>
           </LiStylePadding2>
         </ListyleWrap>
-        <ListyleWrap>
-          <UserProfile></UserProfile>
-          <LiStylePadding2 >유저유저222
-          <BtnDelete><IoClose/></BtnDelete>
-          </LiStylePadding2>
-        </ListyleWrap>
-        <ListyleWrap>
-        <UserProfile></UserProfile>
-        <LiStylePadding2 >유저유저333
-          <BtnDelete><IoClose/></BtnDelete>
-          </LiStylePadding2>
-        </ListyleWrap>
+
         <ListyleWrap>
           <Plus>+</Plus>
-          <LiStylePadding3 onClick={go}>팀원 추가</LiStylePadding3>
+          <LiStylePadding3 onClick={goo}>팀원 추가</LiStylePadding3>
         </ListyleWrap>
       </ul>
     )

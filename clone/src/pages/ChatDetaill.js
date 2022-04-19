@@ -3,24 +3,19 @@ import Grid from '../elements/Grid'
 import MenuList from '../components/MenuList';
 import styled from 'styled-components';
 import Header from '../shared/Header';
-import Chat from  '../chating/Chat'
 import Thread from '../components/Thread'
-import ChatUser from '../chating/ChatUser';
 import ChatList from '../chating/ChatList';
-import ChatBox from '../chating/ChatBox';
 
 
-function ChatDetaill() {
+function ChatDetaill(props) {
   return (
     <Wrap>
       <Grid>
         <Header/>
           <MenuList/>
-          <ChatUser/>
-          <ChatWrap>            
+          <ChatWrapAll>            
             <ChatList/>
-            <ChatBox/>
-        </ChatWrap>
+        </ChatWrapAll>
       </Grid>
     </Wrap>
   )
@@ -33,7 +28,7 @@ background: #1a1d21;
 overflow:hidden;
 
 `;
-const ChatWrap = styled.div `
+const ChatWrapAll = styled.div `
 float : left;
 overflow: hidden;
 height : 100vh;
