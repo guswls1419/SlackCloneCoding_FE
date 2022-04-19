@@ -64,6 +64,7 @@ const Invitation = (props) => {
   };
 
   const onMessageReceived = (payload) => {
+    console.log(payload);
     var payloadData = JSON.parse(payload.body);
     switch (payloadData.status) {
       case "JOIN":
