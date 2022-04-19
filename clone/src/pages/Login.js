@@ -5,11 +5,12 @@ import { useDispatch } from "react-redux";
 import { actionCreators as userActions } from "../redux/modules/user";
 import { FcGoogle } from "react-icons/fc";
 import { BsApple } from "react-icons/bs";
-import { history } from "../redux/configstore";
+import { useHistory } from "react-router-dom";
 
 const Login = (props) => {
   const dispatch = useDispatch();
-  console.log(props);
+  const history = useHistory();
+
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
 

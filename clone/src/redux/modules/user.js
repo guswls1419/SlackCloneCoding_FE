@@ -72,7 +72,7 @@ const loginFB = (email, password) => {
         );
         setCookie("Authorization", res.headers.authorization.split(" ")[1]);
         setCookie("email", email);
-        history.replace("/");
+        history.push("/chat");
       })
 
       .catch((error) => {

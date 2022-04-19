@@ -7,8 +7,9 @@ import { history } from "./redux/configstore";
 import { ConnectedRouter } from "connected-react-router";
 import "./App.css";
 import DirectMessage from "./pages/DirectMessage";
-import { useSelector, useDispatch } from "react-redux";
-import { actionCreators as userAction } from "./redux/modules/user";
+import ChatDetaill from "./pages/ChatDetaill";
+//import test from './test';
+import Invitation from "./chating/Invitation";
 
 function App() {
   return (
@@ -18,6 +19,9 @@ function App() {
         <Route path="/signup" exact component={Signup} />
         <Route path="/user/:id" exact component={UserProfile} />
         <Route path="/dm" exact component={DirectMessage} />
+        <Route path="/chat" exact component={ChatDetaill} />
+        {/* <Route path="/test" exact component={test} /> */}
+        <Route path="/invitation" exact component={Invitation} />
       </ConnectedRouter>
     </React.Fragment>
   );
