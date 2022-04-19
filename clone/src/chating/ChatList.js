@@ -20,7 +20,8 @@ import { GoMention } from "react-icons/go";
 import { CgFormatColor } from "react-icons/cg";
 import { IoSendSharp } from "react-icons/io5";
 
-function ChatList() {
+function ChatList(props) {
+  const { list } = props;
   const [Chat, setChat] = useState("");
   console.log(Chat);
 
@@ -47,7 +48,22 @@ function ChatList() {
       </WSpace>
       <ChatZone>
         {/* ---- map돌릴구간---- */}
-
+        {list.map((item, index) => {
+          return (
+            <ChatOnce key={index}>
+              <ChatImg className="ChatImg">
+                <Img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfoM4RYRBwV1C1mUUOx-CAn3HPYdMNp5s4ag&usqp=CAU" />
+              </ChatImg>
+              <ChatText className="ChatText">
+                <ChatUser className="ChatUser">
+                  <b style={{ float: "left", color: "#fff" }}>{item.nick}</b>
+                  <span style={{ color: "#fff" }}>시간</span>
+                </ChatUser>
+                <ChatCon>{item.text}</ChatCon>
+              </ChatText>
+            </ChatOnce>
+          );
+        })}
         {/* ---- map돌릴구간---- */}
       </ChatZone>
       <ChatWrap>
