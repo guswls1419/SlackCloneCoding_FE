@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../App.css";
 import styled from "styled-components";
 import {
@@ -20,6 +20,9 @@ import { GoMention } from "react-icons/go";
 import { CgFormatColor } from "react-icons/cg";
 import { IoSendSharp } from "react-icons/io5";
 import { useParams } from "react-router-dom";
+// import SockJS from "sockjs-client";
+// import { over } from "stompjs";
+// var stompClient = null;
 
 function ChatList(props) {
   const { list, sendMessage } = props;
@@ -30,6 +33,10 @@ function ChatList(props) {
 
   const [chatMessage, setChatMessage] = useState("");
 
+  // useEffect(() => {
+  //   stompClient.disconnect();
+  // }, []);
+
   const clickBtn = (a) => {
     sendMessage(`${param.id}`, chatMessage);
   };
@@ -39,7 +46,7 @@ function ChatList(props) {
         <WSpaceTop>
           <WSpaceTopCon>
             <Img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfoM4RYRBwV1C1mUUOx-CAn3HPYdMNp5s4ag&usqp=CAU" />
-            <span>유저닉네임</span>
+            <span>채팅방</span>
           </WSpaceTopCon>
         </WSpaceTop>
       </WSpace>
@@ -123,14 +130,12 @@ function ChatList(props) {
     </React.Fragment>
   );
 }
-
 const WSpace = styled.div`
   min-width: 79%;
   max-width: 89%;
-
   position: relative;
   background: #1a1d21;
-  float: left;
+  clear: both;
 `;
 
 const WSpaceTop = styled.div`
@@ -157,12 +162,12 @@ const UserProfile = styled.img`
   border: none;
 `;
 const ChatZone = styled.div`
-  width: 100%;
   height: 73vh;
+  overflow: auto;
 `;
 const ChatOnce = styled.div`
-  padding: 8px 20px;
-  width: 100%;
+  padding: 8px 0px 8px 20px;
+  width: 98%;
   &:hover {
     background: #313438;
   }

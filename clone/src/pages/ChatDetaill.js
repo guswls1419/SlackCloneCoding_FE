@@ -11,13 +11,11 @@ import ChatList from "../chating/ChatList";
 
 var stompClient = null;
 //현재 백엔드분들이 만드신 서버내의 roomId 주소
-// const roomId = "efc24505-6549-4123-9ab0-c10fee26611a";
 
 function ChatDetaill(props) {
   //map 을 돌려서 뿌려주게될 목록
   const [list, setList] = useState([
-    { nick: "aaa", text: "test message" },
-    { nick: "aaa", text: "test message" },
+    { nick: "test 사용자", text: "test message" },
   ]);
 
   const [roomlist, setRoomList] = useState([{ name: "", roomId: "" }]);
@@ -44,7 +42,7 @@ function ChatDetaill(props) {
   const getRoom = async () => {
     const result = await axios
       .get("http://54.180.105.154/chat/listlookup", {
-        name: "aaaa",
+        name: "사용자",
         roomId: roomlist.roomId,
       })
       .then((response) => {
@@ -69,24 +67,9 @@ function ChatDetaill(props) {
         console.log(error);
       });
   };
-  // const createRoom = async () => {
-  //   const result1 = await axios
 
-  //     .post("http://54.180.105.154/chat/createroom",{name:"rom"},{
-  //       headers: {
-  //         "Content-Type": "application/x-www-form-urlencoded",
-  //       },
-  //     })
-  //     .then((response) => {
-  //       console.log(response);
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // };
   //채팅 룸에 접속한다음  소켓연결이 되야하는 라인  : 방 입장하는 버튼
   const enterRoom = (roomId) => {
-    stompClient.disconnect();
     stompClient.subscribe(`/sub/chat/room/enter/${roomId}`, onMessageReceived);
   };
 
@@ -120,7 +103,7 @@ function ChatDetaill(props) {
       JSON.stringify({
         roomId: roomId,
         type: "TALK",
-        sender: "나야",
+        sender: "사용자",
         message: message,
       })
     );
@@ -128,30 +111,14 @@ function ChatDetaill(props) {
   // <ChatList list={list} /> 이부분은 프롭스로 넘겨주는 라인
   return (
     <Wrap>
-      <FixedWrapper>
-        <input onClick={getRoom} type={"button"} value={"방조회하기"}></input>
-        <input
-          onClick={createRoom}
-          type={"button"}
-          value={"방생성하기"}
-        ></input>
-        {/* <input
-          type="text"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-        ></input>
-        <input onClick={sendMessage} type={"button"} value={"보내기"}></input> */}
-      </FixedWrapper>
       <Grid>
-        {/* {list.map((item, index) => {
-          return (
-            <div key={index}>
-              {item.nick} : {item.text}
-            </div>
-          );
-        })} */}
         <Header />
-        <MenuList getRoom={getRoom} roomlist={roomlist} enterRoom={enterRoom} />
+        <MenuList
+          getRoom={getRoom}
+          roomlist={roomlist}
+          enterRoom={enterRoom}
+          createRoom={createRoom}
+        />
         <ChatWrapAll>
           <ChatList
             list={list}
@@ -175,7 +142,7 @@ const ChatWrapAll = styled.div`
   overflow: hidden;
   height: 100vh;
   min-width: 79%;
-  max-width: 89%;
+  max-width: 50%;
 `;
 
 const FixedWrapper = styled.div`

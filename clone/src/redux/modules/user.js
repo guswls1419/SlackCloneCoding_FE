@@ -11,6 +11,7 @@ const LOG_OUT = "LOG_OUT";
 const GET_USER = "GET_USER";
 const LOAD_TOKEN = "LOAD_TOKEN";
 const POST_USER = "POST_USER";
+// const LOAD_INFO = "user/LOAD_INFO";
 
 //3)initialState 만든다
 const initialState = {
@@ -25,6 +26,22 @@ const logIn = createAction(LOG_IN, (user) => ({ user }));
 const logOut = createAction(LOG_OUT, (user) => ({ user }));
 const getUser = createAction(GET_USER, (user) => ({ user }));
 const loadToken = createAction(LOAD_TOKEN, (token) => ({ token }));
+// const getmyinfo = createAction(LOAD_INFO, (userinfo) => ({ userinfo }));
+
+// const getMyInfo = () => {
+//   return async function (dispatch, getState, { history }) {
+//     await api
+//       .get("http://54.180.105.154/myinfo")
+//       .then((res) => {
+//         console.log(12345);
+
+//         dispatch(loadPost(res.data));
+//       })
+//       .catch((err) => {
+//         console.log(err);
+//       });
+//   };
+// };
 
 const signupDB = (email, password, nickname) => {
   return function (dispatch, getState, { history }) {
