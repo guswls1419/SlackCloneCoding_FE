@@ -19,22 +19,19 @@ import { RiCodeBoxLine } from "react-icons/ri";
 import { GoMention } from "react-icons/go";
 import { CgFormatColor } from "react-icons/cg";
 import { IoSendSharp } from "react-icons/io5";
+import { useParams } from "react-router-dom";
 
 function ChatList(props) {
-  const { list } = props;
-  const [Chat, setChat] = useState("");
-  console.log(Chat);
+  const { list, sendMessage } = props;
+  console.log(props);
 
-  const onChangeChat = (e) => {
-    setChat(e.target.value);
-  };
+  const param = useParams();
+  console.log(param);
 
-  //const [chosenEmoji, setChosenEmoji] = useState(false);
+  const [chatMessage, setChatMessage] = useState("");
 
-  const onCheckEnter = (e) => {
-    if (e.key === "Enter") {
-      // 엔터키 누를때 값 전송
-    }
+  const clickBtn = (a) => {
+    sendMessage(`${param.id}`, chatMessage);
   };
   return (
     <React.Fragment>
@@ -94,8 +91,8 @@ function ChatList(props) {
           <Textarea
             type="textarea"
             placeholder="내용을 입력해주세요."
-            value={Chat}
-            onChange={onChangeChat}
+            value={chatMessage}
+            onChange={(e) => setChatMessage(e.target.value)}
           />
           <Toolbox2>
             <Btn>
@@ -118,7 +115,7 @@ function ChatList(props) {
             </Btn>
           </Toolbox2>
 
-          <Send onKeyPress={onCheckEnter}>
+          <Send onClick={clickBtn}>
             <IoSendSharp />
           </Send>
         </form>

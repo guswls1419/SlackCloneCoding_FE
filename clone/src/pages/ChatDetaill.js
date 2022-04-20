@@ -11,7 +11,7 @@ import ChatList from "../chating/ChatList";
 
 var stompClient = null;
 //현재 백엔드분들이 만드신 서버내의 roomId 주소
-const roomId = "efc24505-6549-4123-9ab0-c10fee26611a";
+// const roomId = "efc24505-6549-4123-9ab0-c10fee26611a";
 
 function ChatDetaill(props) {
   //map 을 돌려서 뿌려주게될 목록
@@ -20,8 +20,9 @@ function ChatDetaill(props) {
     { nick: "aaa", text: "test message" },
   ]);
 
-  //메세지 작성시 사용하는 라인
-  const [message, setMessage] = useState("");
+  const [roomlist, setRoomList] = useState([{ name: "", roomId: "" }]);
+
+  console.log(roomlist);
 
   //화면이 렌더 될떄 서버와의 연결
   useEffect(() => {
@@ -39,14 +40,60 @@ function ChatDetaill(props) {
   //서버와의 연결이 되자마자 행동은 하지않으니 잠시 대기
   const onConnected = () => {};
 
-  //채팅 룸에 접속한다음  소켓연결이 되야하는 라인
-  const enterRoom = () => {
-    stompClient.subscribe("/sub/chat/room/enter/" + roomId, onMessageReceived);
+  // 채팅방 입장시 사용하는 코드들
+  const getRoom = async () => {
+    const result = await axios
+      .get("http://54.180.105.154/chat/listlookup", {
+        name: "aaaa",
+        roomId: roomlist.roomId,
+      })
+      .then((response) => {
+        setRoomList(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const createRoom = async () => {
+    const formData = new FormData();
+    formData.append("name", "으아아");
+    await axios
+      .post("http://54.180.105.154/chat/createroom", formData, {
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      })
+      .then((res) => {
+        console.log(JSON.stringify(res.data));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  // const createRoom = async () => {
+  //   const result1 = await axios
+
+  //     .post("http://54.180.105.154/chat/createroom",{name:"rom"},{
+  //       headers: {
+  //         "Content-Type": "application/x-www-form-urlencoded",
+  //       },
+  //     })
+  //     .then((response) => {
+  //       console.log(response);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // };
+  //채팅 룸에 접속한다음  소켓연결이 되야하는 라인  : 방 입장하는 버튼
+  const enterRoom = (roomId) => {
+    stompClient.disconnect();
+    stompClient.subscribe(`/sub/chat/room/enter/${roomId}`, onMessageReceived);
   };
 
   //연결된 서버와의 통신시 payloadData의 타입에 따른 정보들
   const onMessageReceived = (payload) => {
     var payloadData = JSON.parse(payload.body);
+    console.log(payloadData);
     switch (payloadData.type) {
       case "JOIN":
         break;
@@ -65,30 +112,14 @@ function ChatDetaill(props) {
     console.log(err);
   };
 
-  // 채팅방 입장시 사용하는 코드들
-  const getRoom = async () => {
-    // const result = await axios
-    //   .post("http://13.209.7.115/chat/createroom", {
-    //     name: "aaaa",
-    //   })
-    //   .then((response) => {
-    //     console.log(response);
-    //     return response;
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
-    const result = roomId;
-  };
-
-  // 메세지를 보낼때 사용하는 함수들
-  const sendMessage = () => {
+  // 메세지를 보낼때 사용하는 함수들  메세지보내는 함수
+  const sendMessage = (roomId, message) => {
     stompClient.send(
       "/pub/chat/message",
       {},
       JSON.stringify({
-        type: "TALK",
         roomId: roomId,
+        type: "TALK",
         sender: "나야",
         message: message,
       })
@@ -98,18 +129,18 @@ function ChatDetaill(props) {
   return (
     <Wrap>
       <FixedWrapper>
-        <input onClick={getRoom} type={"button"} value={"방생성하기"}></input>
+        <input onClick={getRoom} type={"button"} value={"방조회하기"}></input>
         <input
-          onClick={enterRoom}
+          onClick={createRoom}
           type={"button"}
-          value={"방 들어가기"}
+          value={"방생성하기"}
         ></input>
-        <input
+        {/* <input
           type="text"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
         ></input>
-        <input onClick={sendMessage} type={"button"} value={"보내기"}></input>
+        <input onClick={sendMessage} type={"button"} value={"보내기"}></input> */}
       </FixedWrapper>
       <Grid>
         {/* {list.map((item, index) => {
@@ -120,9 +151,13 @@ function ChatDetaill(props) {
           );
         })} */}
         <Header />
-        <MenuList />
+        <MenuList getRoom={getRoom} roomlist={roomlist} enterRoom={enterRoom} />
         <ChatWrapAll>
-          <ChatList list={list} />
+          <ChatList
+            list={list}
+            sendMessage={sendMessage}
+            enterRoom={enterRoom}
+          />
         </ChatWrapAll>
       </Grid>
     </Wrap>

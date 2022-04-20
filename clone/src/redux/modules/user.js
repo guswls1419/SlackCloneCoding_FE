@@ -30,7 +30,7 @@ const signupDB = (email, password, nickname) => {
   return function (dispatch, getState, { history }) {
     console.log(dispatch);
     axios
-      .post("http://13.209.7.115/user/signup", {
+      .post("http://3.38.104.97:8080/user/signup", {
         email: email,
         password: password,
         nickname: nickname,

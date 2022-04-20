@@ -12,12 +12,9 @@ import { IoClose } from "react-icons/io5";
 import { useHistory } from "react-router-dom";
 
 const Menu = (props) => {
+  console.log(props);
   const history = useHistory();
-  const [Change, setChange] = useState(false);
-
-  const MouseEnter = () => {
-    setChange(Change === false ? true : false);
-  };
+  const { roomlist, enterRoom } = props;
 
   const goo = () => {
     console.log(11);
@@ -42,14 +39,22 @@ const Menu = (props) => {
       <br />
 
       {/* 채널 */}
-      <DmMsg onmouseenter={MouseEnter} Change={Change}>
+      <DmMsg>
         <AiFillCaretDown style={{ marginRight: "5px" }} />
         채널
       </DmMsg>
-      <LiStylePadding>
-        <BiLockAlt style={{ marginRight: "5px" }} />
-        채널1
-      </LiStylePadding>
+      {roomlist.map((item, index) => {
+        const clickItem = () => {
+          enterRoom(item.roomId);
+          history.push(`/chat/${item.roomId}`);
+        };
+        return (
+          <LiStylePadding onClick={clickItem}>
+            <BiLockAlt style={{ marginRight: "5px" }} />
+            {item.name}
+          </LiStylePadding>
+        );
+      })}
 
       <diListyleWrapv>
         <Plus>+</Plus>
@@ -66,6 +71,15 @@ const Menu = (props) => {
     </ul>
   );
 };
+
+const FixedWrapper = styled.div`
+  position: fixed;
+  width: 200px;
+  height: 200px;
+  bottom: 0px;
+  left: 200px;
+  background: white;
+`;
 
 const UserProfile = styled.button`
   width: 20px;

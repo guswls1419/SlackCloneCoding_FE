@@ -19,7 +19,7 @@ function App() {
         <Route path="/signup" exact component={Signup} />
         <Route path="/user/:id" exact component={UserProfile} />
         <Route path="/dm" exact component={DirectMessage} />
-        <Route path="/chat" exact component={ChatDetaill} />
+        <Route path="/chat/:id" exact component={ChatDetaill} />
         {/* <Route path="/test" exact component={test} /> */}
         <Route path="/invitation" exact component={Invitation} />
       </ConnectedRouter>
