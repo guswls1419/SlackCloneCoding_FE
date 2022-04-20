@@ -70,6 +70,8 @@ function ChatDetaill(props) {
 
   //채팅 룸에 접속한다음  소켓연결이 되야하는 라인  : 방 입장하는 버튼
   const enterRoom = (roomId) => {
+    // stompClient.disconnect(),
+    //   connect(),
     stompClient.subscribe(`/sub/chat/room/enter/${roomId}`, onMessageReceived);
   };
 
