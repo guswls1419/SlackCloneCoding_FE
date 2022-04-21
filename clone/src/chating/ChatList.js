@@ -42,7 +42,7 @@ function ChatList(props) {
       sendMessage(`${param.id}`, chatMessage);
     }
    
-  };
+  };     
 
   return (
     <React.Fragment>
