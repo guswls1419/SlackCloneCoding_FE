@@ -5,116 +5,35 @@ import { useHistory } from "react-router-dom";
 import DirectMessage from "../pages/DirectMessage";
 import { over } from "stompjs";
 import SockJS from "sockjs-client";
+import { useDispatch } from "react-redux";
 
 const Invitation = (props) => {
   const history = useHistory();
+  const disptch = useDispatch();
 
-  const [privateChats, setPrivateChats] = useState(new Map());
-  const [userData, setUserData] = useState({
-    roomId: "624343d0-8f46-49c4-8f4f-7ee99df583c2",
-    room: {},
-    sender: "test",
-    message: "",
-    messages: [],
-  });
-  const [publicChats, setPublicChats] = useState([]);
-  console.log(userData);
-
-  var stompClient = null;
-  useEffect(() => {
-    connect();
-  }, []);
-  //소켓
-  const connect = () => {
-    let Sock = new SockJS("http://3.38.104.97/ws-stomp");
-    stompClient = over(Sock);
-    stompClient.connect({}, onConnected, onError);
-  };
-
-  const onConnected = () => {
-    // setUserData({ ...userData, connected: true });
-    stompClient.subscribe("/chat/createroom", onMessageReceived);
-    stompClient.subscribe(
-      "/user/" + userData.sender + "/private",
-      onPrivateMessage
-    );
-  };
-
-  const onError = (err) => {
-    console.log(err);
-  };
-
-  const userJoin = () => {
-    var chatMessage = {
-      sender: userData.name,
-      type: "ENTER",
-      roomId: "624343d0-8f46-49c4-8f4f-7ee99df583c2",
-    };
-    console.log(userData);
-    stompClient.send(
-      "/pub/chat/message",
-
-      {},
-      JSON.stringify({
-        type: "ENTER",
-        roomId: userData.roomId,
-        sender: userData.sender,
-      })
-    );
-  };
-
-  const onMessageReceived = (payload) => {
-    console.log(payload);
-    var payloadData = JSON.parse(payload.body);
-    switch (payloadData.status) {
-      case "JOIN":
-        if (!privateChats.get(payloadData.sender)) {
-          privateChats.set(payloadData.sender, []);
-          setPrivateChats(new Map(privateChats));
-        }
-        break;
-      case "MESSAGE":
-        publicChats.push(payloadData);
-        setPublicChats([...publicChats]);
-        break;
-    }
-    console.log(payload);
-  };
-
-  const onPrivateMessage = (payload) => {
-    console.log(payload);
-    var payloadData = JSON.parse(payload.body);
-    if (privateChats.get(payloadData.sender)) {
-      privateChats.get(payloadData.sender).push(payloadData);
-      setPrivateChats(new Map(privateChats));
-    } else {
-      let list = [];
-      list.push(payloadData);
-      privateChats.set(payloadData.senderName, list);
-      setPrivateChats(new Map(privateChats));
-    }
-  };
+  const { createRoom } = props;
 
   //인풋 값 전달함수
-  const handleUsername = (event) => {
-    const { value } = event.target;
-    setUserData({ ...userData, name: value });
+
+  const [chatRoomName,setChatRoomName] = useState();
+
+  const handleUsername = (e) => {
+    setChatRoomName(e.target.value)
   };
-  //버튼 실행함수
-  const go = () => {
-    userJoin();
-  };
+
+  const { open, close } = props;
 
   return (
     <React.Fragment>
-      <ModalWrap>
+       {open 
+      ? ( <ModalWrap>
         <Modal>
           <div>
             <Grid is_flex padding="20px">
               <div
                 style={{ fontSize: "20px", fontWeight: "800", color: "white" }}
               >
-                HangHae99에 초대 요청
+                채팅방개설
               </div>
               <button
                 style={{
@@ -123,66 +42,44 @@ const Invitation = (props) => {
                   background: "none",
                   border: "none",
                 }}
-                onClick={() => {
-                  history.push("/dm");
-                }}
+                onClick={close}
               >
                 x
               </button>
             </Grid>
-            <Grid is_flex padding="0px 20px 8px 20px">
-              <div
-                style={{ fontSize: "14px", fontWeight: "600", color: "white" }}
-              >
-                받는사람:
-              </div>
-              <div style={{ fontSize: "14px", color: "white" }}>
-                다음에서 추가:
-              </div>
-            </Grid>
+            
             <Grid is_flex padding="0px 20px 0px 20px">
               <Textarea
                 type="textarea"
-                placeholder="name@naver.com"
+                placeholder="채팅방명을 입력해 주세요."
                 onChange={handleUsername}
               />
             </Grid>
-            <Grid padding="20px 20px 8px 20px">
-              <div
-                style={{ fontSize: "14px", fontWeight: "600", color: "white" }}
-              >
-                요청이유(옵션)
-              </div>
-            </Grid>
-            <Grid padding="0px 20px 8px 20px">
-              <Inputs type="text" placeholder="관리자를 위한 메모 추가" />
-            </Grid>
+            
+            
             <Grid padding="0px 20px 8px 20px">
               <div
-                style={{ fontSize: "13px", fontWeight: "300", color: "white" }}
+                style={{ fontSize: "13px", fontWeight: "300", color: "white" ,marginTop:"8px"}}
               >
                 요청이 관리자에게 전송되며 승인되거나 거부되면 알림을 받게
                 됩니다.
               </div>
             </Grid>
-            <Button
-              backgroundColor="#F5C820"
-              color="black"
-              _onClick={go}
-              width="100px"
-            >
+            <ChatBTN
+              onClick={createRoom}
+              >
               요청 보내기
-            </Button>
+            </ChatBTN>
           </div>
         </Modal>
-      </ModalWrap>
-      <DirectMessage />
+      </ModalWrap>) 
+      : null }
     </React.Fragment>
   );
 };
 
 const Modal = styled.div`
-  height: 400px;
+  height: 230px;
   max-width: 350px;
   min-width: 520px;
   background: #1a1d21;
@@ -201,14 +98,14 @@ const ModalWrap = styled.div`
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.6);
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   z-index: 3;
 `;
 const Textarea = styled.textarea`
   width: 100%;
-  height: 60px;
+  height: 35px;
   padding: 13px;
   background: none;
   border: 1px solid #464646;
@@ -221,16 +118,19 @@ const Textarea = styled.textarea`
     outline: none;
   }
 `;
-const Inputs = styled.input`
-  width: 95%;
-  height: 20px;
-  padding: 10px;
-  background: none;
-  border: 1px solid #464646;
+const ChatBTN = styled.button`
+  width: 30%;
+  height: 35px;
+  text-align:center;
+  background: #212121;
   border-radius: 3px;
   font-size: 13px;
   font-weight: bold;
-  color: #ababad;
+  color: white;
+  border : none;
+  position : absolute;
+  left : 35%;
+  bottom : 20px;
 `;
 
 export default Invitation;

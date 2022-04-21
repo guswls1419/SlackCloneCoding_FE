@@ -37,16 +37,20 @@ function ChatList(props) {
   //   stompClient.disconnect();
   // }, []);
 
-  const clickBtn = (a) => {
-    sendMessage(`${param.id}`, chatMessage);
+  const clickBtn = (e) => {
+    if(e.key === 'Enter') {
+      sendMessage(`${param.id}`, chatMessage);
+    }
+   
   };
+
   return (
     <React.Fragment>
       <WSpace>
         <WSpaceTop>
           <WSpaceTopCon>
             <Img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfoM4RYRBwV1C1mUUOx-CAn3HPYdMNp5s4ag&usqp=CAU" />
-            <span>채팅방</span>
+            <span style={{marginLeft:"8px"}}>채팅방</span>
           </WSpaceTopCon>
         </WSpaceTop>
       </WSpace>
@@ -96,7 +100,7 @@ function ChatList(props) {
             </Btn>
           </Toolbox>
           <Textarea
-            type="textarea"
+            type="text"
             placeholder="내용을 입력해주세요."
             value={chatMessage}
             onChange={(e) => setChatMessage(e.target.value)}
@@ -131,8 +135,8 @@ function ChatList(props) {
   );
 }
 const WSpace = styled.div`
-  min-width: 79%;
-  max-width: 89%;
+  min-width: 100%;
+  max-width: 50%;
   position: relative;
   background: #1a1d21;
   clear: both;
@@ -148,7 +152,7 @@ const WSpaceTopCon = styled.div`
   font-weight: bold;
   font-size: 16px;
   padding-left: 20px;
-  padding-top: 12px;
+  padding-top: 8px;
   line-height: 27px;
 `;
 
@@ -216,8 +220,8 @@ const Toolbox = styled.div`
   padding-left: 12px;
   padding-top: 10px;
 `;
-
-const Textarea = styled.textarea`
+//수정
+const Textarea = styled.input`
   width: 100%;
   height: 50px;
   background: none;
