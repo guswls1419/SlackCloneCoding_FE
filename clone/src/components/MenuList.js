@@ -4,8 +4,14 @@ import Menu from "./Menu";
 import WorkSpace from "./WorkSpace";
 
 function MenuList(props) {
-  const { roomlist, enterRoom, sendMessage, onMessageReceived, getRoom } =
-    props;
+  const {
+    roomlist,
+    enterRoom,
+    sendMessage,
+    onMessageReceived,
+    getRoom,
+    createRoom,
+  } = props;
 
   useEffect(() => {
     getRoom();
@@ -19,6 +25,7 @@ function MenuList(props) {
         sendMessage={sendMessage}
         onMessageReceived={onMessageReceived}
         enterRoom={enterRoom}
+        createRoom={createRoom}
       />
     </DmWrap>
   );

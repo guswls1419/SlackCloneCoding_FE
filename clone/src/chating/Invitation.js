@@ -26,7 +26,7 @@ const Invitation = (props) => {
   }, []);
   //소켓
   const connect = () => {
-    let Sock = new SockJS("http://54.180.105.154/ws-stomp");
+    let Sock = new SockJS("http://3.38.104.97/ws-stomp");
     stompClient = over(Sock);
     stompClient.connect({}, onConnected, onError);
   };

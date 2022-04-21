@@ -30,7 +30,7 @@ function ChatDetaill(props) {
 
   // connect 함수
   const connect = () => {
-    let Sock = new SockJS("http://54.180.105.154/ws-stomp");
+    let Sock = new SockJS("http://3.38.104.97/ws-stomp");
     stompClient = over(Sock);
     stompClient.connect({}, onConnected, onError);
   };
@@ -41,7 +41,7 @@ function ChatDetaill(props) {
   // 채팅방 입장시 사용하는 코드들
   const getRoom = async () => {
     const result = await axios
-      .get("http://54.180.105.154/chat/listlookup", {
+      .get("http://3.38.104.97/chat/listlookup", {
         name: "사용자",
         roomId: roomlist.roomId,
       })
@@ -57,7 +57,7 @@ function ChatDetaill(props) {
     const formData = new FormData();
     formData.append("name", "으아아");
     await axios
-      .post("http://54.180.105.154/chat/createroom", formData, {
+      .post("http://3.38.104.97/chat/createroom", formData, {
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
       })
       .then((res) => {
