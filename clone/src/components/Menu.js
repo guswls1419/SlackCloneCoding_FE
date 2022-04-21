@@ -10,10 +10,21 @@ import { BsAt } from "react-icons/bs";
 import { BiMerge, BiLockAlt } from "react-icons/bi";
 import { IoClose } from "react-icons/io5";
 import { useHistory } from "react-router-dom";
+import Invitation from "../chating/Invitation";
 
 const Menu = (props) => {
   const history = useHistory();
   const { roomlist, enterRoom, createRoom } = props;
+
+  //모달창
+  const [modalOpen, setModalOpen] = useState(false);
+console.log(modalOpen) 
+  const openModal = () => {
+    setModalOpen(true);
+  };
+  const closeModal = () => {
+    setModalOpen(false);
+  };
 
   return (
     <ul style={{ marginTop: "16px" }}>
@@ -67,7 +78,7 @@ const Menu = (props) => {
 
         return (
           <LiStylePadding onClick={clickItem}>
-            <UserProfile style={{ marginRight: "5px" }} />
+            <UserProfile src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfoM4RYRBwV1C1mUUOx-CAn3HPYdMNp5s4ag&usqp=CAU" />
             {item.name}
           </LiStylePadding>
         );
@@ -75,14 +86,15 @@ const Menu = (props) => {
 
       <ListyleWrap>
         <Plus>+</Plus>
-        <LiStyle onClick={createRoom}>메시지 추가</LiStyle>
+        <LiStyle onClick={openModal}>메시지 추가</LiStyle>
+        <Invitation  open={modalOpen} close={closeModal} createRoom={createRoom}/>
       </ListyleWrap>
     </ul>
   );
 };
 
-const UserProfile = styled.button`
-  width: 20px;
+const UserProfile = styled.img`
+width: 20px;
   height: 20px;
   border-radius: 5px;
   background: white;
