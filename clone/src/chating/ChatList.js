@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import "../App.css";
 import styled from "styled-components";
 import {
@@ -19,42 +19,66 @@ import { RiCodeBoxLine } from "react-icons/ri";
 import { GoMention } from "react-icons/go";
 import { CgFormatColor } from "react-icons/cg";
 import { IoSendSharp } from "react-icons/io5";
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
+import { Scrollbars } from 'react-custom-scrollbars';
+import { Picker } from "emoji-mart";  
+import "emoji-mart/css/emoji-mart.css";  
+import { useSelector } from "react-redux";
 // import SockJS from "sockjs-client";
 // import { over } from "stompjs";
 // var stompClient = null;
 
 function ChatList(props) {
-  const { list, sendMessage } = props;
-  console.log(props);
+  const { list, sendMessage, scrollbarRef, } = props;
+  console.log(list);
 
   const param = useParams();
-  console.log(param);
+
 
   const [chatMessage, setChatMessage] = useState("");
-
+ const history = useHistory();
   // useEffect(() => {
   //   stompClient.disconnect();
   // }, []);
 
-  const clickBtn = (e) => {
-    if(e.key === 'Enter') {
-      sendMessage(`${param.id}`, chatMessage);
-    }
-   
-  };     
+  // const clickBtn = (e) => {
+  //     if(e.key === 'Enter') {
+  //     sendMessage(`${param.id}`, chatMessage);
+     
+  // };     
+  
+  //이모지
+  const addEmoji = (e) => {  
+    let sym = e.unified.split("-");  
+    let codesArray = [];  
+    sym.forEach((el) => codesArray.push("0x" + el));  
+    let emoji = String.fromCodePoint(...codesArray);  
+    setChatMessage(chatMessage + emoji);  
+  };  
+//이모지 버튼 스위치
+const [emoji, setEmoji] = useState(false);
+ 
+const openEmoji = () => {
+    setEmoji(emoji===false? true:false);
+  };
+
+//   const dmList = useSelector((state)=>state.dm)
+// console.log(dmList)
+
+
 
   return (
     <React.Fragment>
       <WSpace>
         <WSpaceTop>
           <WSpaceTopCon>
-            <Img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfoM4RYRBwV1C1mUUOx-CAn3HPYdMNp5s4ag&usqp=CAU" />
-            <span style={{marginLeft:"8px"}}>채팅방</span>
+            {/* <Img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfoM4RYRBwV1C1mUUOx-CAn3HPYdMNp5s4ag&usqp=CAU" /> */}
+            <span style={{marginLeft:"5px",lineHeight:"38px",fontSize:"20px"}}>채팅창</span>
           </WSpaceTopCon>
         </WSpaceTop>
       </WSpace>
       <ChatZone>
+        {/* <Scrollbars autoHide ref={scrollbarRef} onScrollFrame={onscroll}> */}
         {/* ---- map돌릴구간---- */}
         {list.map((item, index) => {
           return (
@@ -65,7 +89,7 @@ function ChatList(props) {
               <ChatText className="ChatText">
                 <ChatUser className="ChatUser">
                   <b style={{ float: "left", color: "#fff" }}>{item.nick}</b>
-                  <span style={{ color: "#fff" }}>시간</span>
+                  {/* <span style={{ color: "#fff" }}>시간</span> */}
                 </ChatUser>
                 <ChatCon>{item.text}</ChatCon>
               </ChatText>
@@ -73,6 +97,7 @@ function ChatList(props) {
           );
         })}
         {/* ---- map돌릴구간---- */}
+        {/* </Scrollbars> */}
       </ChatZone>
       <ChatWrap>
         <form>
@@ -103,7 +128,7 @@ function ChatList(props) {
             type="text"
             placeholder="내용을 입력해주세요."
             value={chatMessage}
-            onChange={(e) => setChatMessage(e.target.value)}
+            onChange={(e) => setChatMessage(e.target.value) }
           />
           <Toolbox2>
             <Btn>
@@ -115,8 +140,9 @@ function ChatList(props) {
             <Btn>
               <BsMic style={{ marginRight: "12px" }} />
             </Btn>
-            <Btn>
+            <Btn onClick={openEmoji}>
               <BsEmojiSmile style={{ marginRight: "12px" }} />
+              {emoji===true?<Picker style={{position:"absolute", bottom:"30px", left:"15px"}} onSelect={addEmoji} />  :null}
             </Btn>
             <Btn>
               <GoMention style={{ marginRight: "12px" }} />
@@ -125,8 +151,8 @@ function ChatList(props) {
               <CgFormatColor style={{ marginRight: "12px" }} />
             </Btn>
           </Toolbox2>
-
-          <Send onClick={clickBtn}>
+          
+          <Send onClick={()=> sendMessage(`${param.id}`, chatMessage)}>
             <IoSendSharp />
           </Send>
         </form>
@@ -247,6 +273,7 @@ const Toolbox2 = styled.div`
 `;
 
 const Btn = styled.div`
+  position: relative;
   border: none;
   background: none;
   cursor: pointer;

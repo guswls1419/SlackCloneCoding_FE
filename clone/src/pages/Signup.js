@@ -79,7 +79,7 @@ const Signup = (props) => {
 
               <Grid>
                 <PwdFont
-                  type="passwordcheck"
+                  type="password"
                   onChange={(e) => {
                     setPasswordCheck(e.target.value);
                   }}

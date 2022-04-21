@@ -10,21 +10,21 @@ import { BsAt } from "react-icons/bs";
 import { BiMerge, BiLockAlt } from "react-icons/bi";
 import { IoClose } from "react-icons/io5";
 import { useHistory } from "react-router-dom";
-import Invitation from "../chating/Invitation";
+// import Invitation from "../chating/Invitation";
 
 const Menu = (props) => {
   const history = useHistory();
   const { roomlist, enterRoom, createRoom } = props;
 
-  //모달창
-  const [modalOpen, setModalOpen] = useState(false);
-console.log(modalOpen) 
-  const openModal = () => {
-    setModalOpen(true);
-  };
-  const closeModal = () => {
-    setModalOpen(false);
-  };
+//   //모달창
+//   const [modalOpen, setModalOpen] = useState(false);
+// console.log(modalOpen) 
+//   const openModal = () => {
+//     setModalOpen(true);
+//   };
+//   const closeModal = () => {
+//     setModalOpen(false);
+//   };
 
   return (
     <ul style={{ marginTop: "16px" }}>
@@ -73,7 +73,7 @@ console.log(modalOpen)
       {roomlist.map((item, index) => {
         const clickItem = () => {
           enterRoom(item.roomId);
-          history.push(`/chat/${item.roomId}`);
+          history.push(`/chat/${item.roomId}`);        
         };
 
         return (
@@ -86,8 +86,8 @@ console.log(modalOpen)
 
       <ListyleWrap>
         <Plus>+</Plus>
-        <LiStyle onClick={openModal}>메시지 추가</LiStyle>
-        <Invitation  open={modalOpen} close={closeModal} createRoom={createRoom}/>
+        <LiStyle onClick={createRoom}>메시지 추가</LiStyle>
+        {/* <Invitation  open={modalOpen} close={closeModal} createRoom={createRoom} roomlist={roomlist}/> */}
       </ListyleWrap>
     </ul>
   );

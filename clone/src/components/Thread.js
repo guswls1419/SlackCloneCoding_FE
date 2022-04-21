@@ -12,8 +12,8 @@ function Thread() {
 }
 
 const WSpace = styled.div`
-  min-width: 100%;
-  max-width: 50%;
+  min-width: 0%;
+  max-width: 100%;
   position: relative;
   background: #1a1d21;
   float: left;

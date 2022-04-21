@@ -1,24 +1,31 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Grid, Button, Text, Input } from "../elements";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import DirectMessage from "../pages/DirectMessage";
 import { over } from "stompjs";
 import SockJS from "sockjs-client";
 import { useDispatch } from "react-redux";
+import { actionCreators as dmAction } from "../redux/modules/dm";
 
 const Invitation = (props) => {
   const history = useHistory();
   const disptch = useDispatch();
 
-  const { createRoom } = props;
+  const { createRoom,roomlist } = props;
+
+//  const test = 
+//    createRoom
+//    history.push(`/chat/${roomlist.roomid}`)
+//    //disptch(chatRoomName)
+//  }
 
   //인풋 값 전달함수
 
   const [chatRoomName,setChatRoomName] = useState();
-
-  const handleUsername = (e) => {
+  const handleChatName = (e) => {
     setChatRoomName(e.target.value)
+    disptch(dmAction.getDm(chatRoomName))
   };
 
   const { open, close } = props;
@@ -52,7 +59,7 @@ const Invitation = (props) => {
               <Textarea
                 type="textarea"
                 placeholder="채팅방명을 입력해 주세요."
-                onChange={handleUsername}
+                onChange={handleChatName}
               />
             </Grid>
             
@@ -65,11 +72,13 @@ const Invitation = (props) => {
                 됩니다.
               </div>
             </Grid>
+            <Link to={`/chat/${roomlist.roomid}`}>
             <ChatBTN
               onClick={createRoom}
-              >
+             > 
               요청 보내기
             </ChatBTN>
+            </Link>
           </div>
         </Modal>
       </ModalWrap>) 

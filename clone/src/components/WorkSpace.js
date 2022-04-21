@@ -7,7 +7,7 @@ function WorkSpace() {
   return (
     <WSpace>
       <WSpaceTop>
-        <WSpaceTopCon>내용이들어감<Span><AiOutlineDown/></Span>
+        <WSpaceTopCon>HangHae99 6조<Span><AiOutlineDown/></Span>
         <Writing>
           <Img src='https://us.123rf.com/450wm/martialred/martialred1507/martialred150700949/42621673-%EC%95%B1-%EB%B0%8F-%EC%9B%B9-%EC%82%AC%EC%9D%B4%ED%8A%B8%EC%9D%98-%EB%A9%94%EC%8B%9C%EC%A7%80-%EC%A4%84-%EC%95%84%ED%8A%B8-%EC%95%84%EC%9D%B4%EC%BD%98-%EC%9E%91%EC%84%B1.jpg?ver=6'/>
         </Writing>

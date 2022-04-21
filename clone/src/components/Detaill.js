@@ -34,8 +34,12 @@ const DetaillWrap = styled.div`
   float: left;
   overflow: hidden;
   height: 100vh;
-  min-width: 79%;
-  max-width: 89%;
+  min-width: 88%;
+  max-width: 50%;
+  position: absolute;
+  right:30px;
+  top : 2px;
+  background: #1a1d21;
 `;
 
 const Img = styled.img`
